@@ -4,16 +4,20 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.UUID;
-
 @Data
 @Document
 public class Customer {
     @Id
-    private Long id;
-    private UUID uuid;
+    private String uuid;
     private String name;
     private String email;
     private String password;
     private Boolean activeStatus;
+
+    public Customer(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.activeStatus=true;
+    }
 }
