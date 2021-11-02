@@ -20,12 +20,12 @@ import java.util.List;
 public class CustomerController {
 
     @Autowired
-    private CustomerService service;
+    private CustomerService customerService;
 
     @GetMapping
     public ResponseEntity<List<Customer>> getHelloWorld(){
 
-        List<Customer> customers = service.getAllCustomers();
+        List<Customer> customers = customerService.getAllCustomers();
 
         return ResponseEntity.ok(customers);
     }
@@ -35,21 +35,25 @@ public class CustomerController {
 
         Pageable requestPage = PageRequest.of(page, size);
 
-
-        Page<Customer> customers = service.getAllPaginated(requestPage);
-
-        return customers;
+        return  customerService.getAllPaginated(requestPage);
     }
 
     @PostMapping
     @Validated
-    public ResponseEntity<Customer> creatCustomer(@RequestBody @Valid CustomerDto customerDto){
+    public ResponseEntity<Customer> creatCustomer(@RequestBody @Valid final CustomerDto customerDto){
 
-        Customer createdCustomer = service.insertCustomer(customerDto);
+        Customer createdCustomer = customerService.insertCustomer(customerDto);
 
         return ResponseEntity.ok(createdCustomer);
     }
 
+    public ResponseEntity<Void> deleteCustomer(@RequestParam final String id) {
+
+        customerService.deleteCustomer(id);
+        // doubts: how does the getHttpStatus in an exception is treated in the respone entity (@ExceptionHandler??)
+        // if so how the controller advice gets an abstract exception to do the getHttpStatus for
+        return ResponseEntity.noContent().build();
+    }
 
 
 }
