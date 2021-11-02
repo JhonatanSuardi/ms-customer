@@ -36,10 +36,10 @@ public class CustomerService {
         return customerRepository.findAll(requestPage);
     }
 
-    public void deleteCustomer(final String id){
-        Customer customer = customerRepository.findByIdentifier(UUID.fromString(id))
-                .orElseThrow(() -> new EntityNotFoundException("Could not find the entity to delete"));
-
-        customerRepository.delete(customer);
-    }
+//    public void deleteCustomer(final String id){
+//        Customer customer = customerRepository.findByIdentifier(UUID.fromString(id))
+//                .orElseThrow(() -> new EntityNotFoundException("Could not find the entity to delete"));
+//
+//        customerRepository.delete(customer);
+//    }
 }

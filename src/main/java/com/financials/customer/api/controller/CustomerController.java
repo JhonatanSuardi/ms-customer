@@ -47,13 +47,14 @@ public class CustomerController {
         return ResponseEntity.ok(createdCustomer);
     }
 
-    public ResponseEntity<Void> deleteCustomer(@RequestParam final String id) {
-
-        customerService.deleteCustomer(id);
-        // doubts: how does the getHttpStatus in an exception is treated in the respone entity (@ExceptionHandler??)
-        // if so how the controller advice gets an abstract exception to do the getHttpStatus for
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping
+//    public ResponseEntity<Void> deleteCustomer(@RequestParam final String id) {
+//
+//        customerService.deleteCustomer(id);
+//        // doubts: how does the getHttpStatus in an exception is treated in the respone entity (@ExceptionHandler??)
+//        // if so how the controller advice gets an abstract exception to do the getHttpStatus for
+//        return ResponseEntity.noContent().build();
+//    }
 
 
 }
