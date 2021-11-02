@@ -1,4 +1,4 @@
-package com.financials.customer.api.exceptions;
+package com.financials.customer.core.exceptions;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
