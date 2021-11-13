@@ -12,6 +12,6 @@ public class CustomerDto {
     @NotBlank
     @Email(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "Invalid emaill")
     private String email;
-    @NotBlank
+
     private String password;
 }
