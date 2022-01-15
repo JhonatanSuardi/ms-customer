@@ -3,7 +3,6 @@ package com.financials.customer.api.controller;
 import com.financials.customer.api.dto.CustomerDto;
 import com.financials.customer.business.CustomerService;
 import com.financials.customer.domain.entities.Customer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,57 +20,55 @@ import java.util.Optional;
 @RequestMapping("/custommers")
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+
+    private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getHelloWorld(){
-
+    public ResponseEntity<List<Customer>> getHelloWorld() {
         List<Customer> customers = customerService.getAllCustomers();
-
         return ResponseEntity.ok(customers);
     }
 
     @GetMapping("page")
-    public Page<Customer> getAllPaginated(@Param(value = "page") int page, @Param(value = "size") int size){
-
+    public Page<Customer> getAllPaginated(@Param(value = "page") int page, @Param(value = "size") int size) {
         Pageable requestPage = PageRequest.of(page, size);
-
-        return  customerService.getAllPaginated(requestPage);
+        return customerService.getAllPaginated(requestPage);
     }
 
     @PostMapping
     @Validated
-    public ResponseEntity<Customer> creatCustomer(@RequestBody @Valid final CustomerDto customerDto){
-
+    public ResponseEntity<Customer> creatCustomer(@RequestBody @Valid final CustomerDto customerDto) {
         Customer createdCustomer = customerService.insertCustomer(customerDto);
-
         return ResponseEntity.ok(createdCustomer);
     }
 
     @PutMapping("/{id}")
     @Validated
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") String id, @RequestBody @Valid CustomerDto customerDto){
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") String id, @RequestBody @Valid CustomerDto customerDto) {
         Optional<Customer> customer = customerService.findCustomerById(id);
 
-        if(customer.isPresent()){
+        if (customer.isPresent()) {
             Customer updatedCustomer = customerService.updateCustomer(customer.get(), customerDto);
-            return  ResponseEntity.ok(updatedCustomer);
-        }
-        else{
+            return ResponseEntity.ok(updatedCustomer);
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }
 
-//    @DeleteMapping
-//    public ResponseEntity<Void> deleteCustomer(@RequestParam final String id) {
-//
-//        customerService.deleteCustomer(id);
-//        // doubts: how does the getHttpStatus in an exception is treated in the respone entity (@ExceptionHandler??)
-//        // if so how the controller advice gets an abstract exception to do the getHttpStatus for
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable("id") String id) {
+        try {
+            customerService.deleteCustomer(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 }

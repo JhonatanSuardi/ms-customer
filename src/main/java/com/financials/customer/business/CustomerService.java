@@ -1,9 +1,9 @@
 package com.financials.customer.business;
 
 import com.financials.customer.api.dto.CustomerDto;
+import com.financials.customer.core.exceptions.EntityNotFoundException;
 import com.financials.customer.domain.entities.Customer;
 import com.financials.customer.domain.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,13 @@ import java.util.Optional;
 @Service
 public class CustomerService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+
+    private final CustomerRepository customerRepository;
+
+
+    public CustomerService(CustomerRepository customerRepository){
+        this.customerRepository = customerRepository;
+    }
 
 
     public List<Customer> getAllCustomers(){
@@ -48,10 +53,10 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-//    public void deleteCustomer(final String id){
-//        Customer customer = customerRepository.findByIdentifier(UUID.fromString(id))
-//                .orElseThrow(() -> new EntityNotFoundException("Could not find the entity to delete"));
-//
-//        customerRepository.delete(customer);
-//    }
+    public void deleteCustomer(String id){
+        Customer customer = this.findCustomerById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find the entity to delete"));
+
+        customerRepository.delete(customer);
+    }
 }
