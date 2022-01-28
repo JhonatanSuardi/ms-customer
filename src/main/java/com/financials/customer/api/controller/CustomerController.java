@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/custommers")
@@ -46,18 +45,11 @@ public class CustomerController {
         return ResponseEntity.ok(createdCustomer);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{patchId}")
     @Validated
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") String id, @RequestBody @Valid CustomerDto customerDto) {
-        Optional<Customer> customer = customerService.findCustomerById(id);
-
-        if (customer.isPresent()) {
-            Customer updatedCustomer = customerService.updateCustomer(customer.get(), customerDto);
-            return ResponseEntity.ok(updatedCustomer);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("patchId") String patchId, @RequestBody @Valid CustomerDto customerDto) {
+            customerService.patchCustomer(patchId, customerDto);
+            return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

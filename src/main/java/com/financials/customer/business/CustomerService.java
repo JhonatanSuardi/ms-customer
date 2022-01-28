@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
 
 @Service
 public class CustomerService {
@@ -43,18 +45,18 @@ public class CustomerService {
         return customerRepository.findById(idCustomer);
     }
 
-    public Customer updateCustomer(Customer customer, CustomerDto customerDto){
-        //Coloquei a senha como opcional no DTO
-        //Podemos criar uma validação de senha pra isso
-
-        customer.setName(customerDto.getName());
-        customer.setEmail(customerDto.getEmail());
-
-        return customerRepository.save(customer);
+    public void patchCustomer(final String uuid, final CustomerDto customerDto){
+        customerRepository.findByUuid(UUID.fromString(uuid))
+                .map(customer -> customer.patchfields(customerDto))
+                .map(customerRepository::save)
+                .orElseThrow(() -> new EntityNotFoundException("could not find the customer to update"));
+        //Renomeei o verbo do método para patch já que possui campos opcionais
+        //Temos que implementar o put se necessário
+        //Podemos criar uma validação de senha pra isso - Sim
     }
 
     public void deleteCustomer(String id){
-        Customer customer = this.findCustomerById(id)
+        Customer customer = customerRepository.findByUuid(UUID.fromString(id))
                 .orElseThrow(() -> new EntityNotFoundException("Could not find the entity to delete"));
 
         customerRepository.delete(customer);
