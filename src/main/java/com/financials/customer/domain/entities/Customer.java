@@ -29,6 +29,7 @@ public class Customer {
                 .build();
     }
 
+
     public Customer patchfields(CustomerDto customerDto) {
 
         if(StringUtils.hasLength(customerDto.getName())){

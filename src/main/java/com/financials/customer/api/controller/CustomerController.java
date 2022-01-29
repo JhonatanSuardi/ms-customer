@@ -1,6 +1,7 @@
 package com.financials.customer.api.controller;
 
 import com.financials.customer.api.dto.CustomerDto;
+import com.financials.customer.api.dto.response.CustomerDTOResponse;
 import com.financials.customer.business.CustomerService;
 import com.financials.customer.domain.entities.Customer;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,13 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
+    @GetMapping("/{uuid}")
+    @Validated
+    public ResponseEntity<CustomerDTOResponse> getCustomer(@PathVariable("uuid") String uuid) {
+        CustomerDTOResponse customer = customerService.getCustomerInfo(uuid);
+        return ResponseEntity.ok(customer);
+    }
+
     @GetMapping("page")
     public Page<Customer> getAllPaginated(@Param(value = "page") int page, @Param(value = "size") int size) {
         Pageable requestPage = PageRequest.of(page, size);
@@ -51,8 +59,8 @@ public class CustomerController {
     @PatchMapping("/{patchId}")
     @Validated
     public ResponseEntity<Customer> updateCustomer(@PathVariable("patchId") String patchId, @RequestBody @Valid CustomerDto customerDto) {
-            customerService.patchCustomer(patchId, customerDto);
-            return ResponseEntity.noContent().build();
+        customerService.patchCustomer(patchId, customerDto);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
@@ -64,6 +72,5 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 }
